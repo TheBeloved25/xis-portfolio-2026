@@ -31,7 +31,7 @@ h1 em{font-style:normal;color:#39e59b}
 <h1>Building intelligent<br>systems for <em>modern</em><br>businesses.</h1>
 <div class="rule"></div>
 <span class="node n1"></span><span class="node n2"></span><span class="node n3"></span><span class="node n4"></span>
-<div class="bottom"><span>Emmanuel Akinfesola · AI Automation Specialist</span><strong>emmanuel.studio</strong></div>
+<div class="bottom"><span>Emmanuel Akinfesola · AI Automation Specialist</span><strong>xis-emmanuel.pages.dev</strong></div>
 </body></html>`;
 
 const browser = await chromium.launch();

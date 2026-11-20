@@ -7,7 +7,7 @@
 //     baked in because the master doc marks final naming unconfirmed
 //   - email: hello@emmanuel.studio (placeholder)
 //   - LinkedIn and Fiverr URLs are placeholders
-//   - production URL: https://emmanuel.studio (placeholder for canonical, robots, sitemap, OG)
+//   - production URL: https://xis-emmanuel.pages.dev (live; update here if you move to a custom domain)
 //   - years of experience: not supplied, deliberately omitted
 //   - unverified numeric results are deliberately NOT published (per master doc instruction)
 //   - Event photography, Inbound SMS and Voice AI projects carry a status to be confirmed:
@@ -57,7 +57,7 @@ export const site = {
   pillars: 'AI Automation / AI Agents / Intelligent Business Systems',
   tagline: 'Building intelligent systems that make businesses work smarter.',
   supporting: 'Connecting AI, automation, and business technology to solve real operational challenges.',
-  url: 'https://emmanuel.studio',
+  url: 'https://xis-emmanuel.pages.dev',
   description:
     'Emmanuel builds AI agents, voice systems and intelligent workflows that connect tools, remove manual work and make business operations run smarter.',
   email: 'hello@emmanuel.studio',
@@ -66,7 +66,7 @@ export const site = {
     { label: 'Fiverr', href: 'https://www.fiverr.com/', placeholder: true },
   ] as { label: string; href: string; placeholder?: boolean }[],
   emailPlaceholder: true,
-  urlPlaceholder: true,
+  urlPlaceholder: false,
 };
 
 export const hero = {
