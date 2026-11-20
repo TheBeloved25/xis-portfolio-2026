@@ -2,65 +2,85 @@
 import { useState } from 'react';
 import { contact, site } from '@/data/site';
 
+type FieldName = 'name' | 'email' | 'goal' | 'challenge';
+type Errors = Partial<Record<FieldName, string>>;
+
+const validate = (data: FormData): Errors => {
+  const errors: Errors = {};
+  const name = String(data.get('name') || '').trim();
+  const email = String(data.get('email') || '').trim();
+  const goal = String(data.get('goal') || '').trim();
+  const challenge = String(data.get('challenge') || '').trim();
+  if (!name) errors.name = 'Add your name.';
+  if (!email) errors.email = 'Add your email.';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'Check the email format.';
+  if (!goal) errors.goal = 'Tell me what you want to build.';
+  if (challenge.length < 12) errors.challenge = 'A sentence or two about the challenge, please.';
+  return errors;
+};
+
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
+  const [status, setStatus] = useState<'idle' | 'opened' | 'error'>('idle');
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const found = validate(data);
+    setErrors(found);
+    if (Object.keys(found).length) {
+      setStatus('error');
+      const first = Object.keys(found)[0];
+      form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+      return;
+    }
     const get = (k: string) => String(data.get(k) || '').trim();
-    const name = get('name');
-    const email = get('email');
-    const company = get('company');
-    const goal = get('goal');
-    const challenge = get('challenge');
-    const tools = get('tools');
-    const subject = `Automation enquiry from ${name}`;
+    const subject = `Automation enquiry from ${get('name')}`;
     const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Company: ${company || 'Not provided'}`,
+      `Name: ${get('name')}`,
+      `Email: ${get('email')}`,
+      `Company: ${get('company') || 'Not provided'}`,
       '',
       `${contact.fields.goal}:`,
-      goal,
+      get('goal'),
       '',
       `${contact.fields.challenge}:`,
-      challenge,
+      get('challenge'),
       '',
       `${contact.fields.tools}:`,
-      tools || 'Not provided',
+      get('tools') || 'Not provided',
     ].join('\n');
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    const url = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = url;
+    setStatus('opened');
   }
 
+  const field = (name: FieldName, label: string, placeholder: string, multi = false) => (
+    <label className="field">
+      <span className="field__label mono">{label}</span>
+      {multi
+        ? <textarea name={name} rows={5} required placeholder={placeholder} aria-invalid={!!errors[name]} aria-describedby={errors[name] ? `${name}-error` : undefined} />
+        : <input name={name} type={name === 'email' ? 'email' : 'text'} required placeholder={placeholder} aria-invalid={!!errors[name]} aria-describedby={errors[name] ? `${name}-error` : undefined} />}
+      {errors[name] && <span className="field__error" id={`${name}-error`}>{errors[name]}</span>}
+    </label>
+  );
+
   return (
-    <form className="cform" onSubmit={onSubmit}>
+    <form className="cform" onSubmit={onSubmit} noValidate>
       <div className="cform__row">
-        <label className="field">
-          <span className="field__label mono">{contact.fields.name}</span>
-          <input name="name" type="text" autoComplete="name" required placeholder="Your name" />
-        </label>
-        <label className="field">
-          <span className="field__label mono">{contact.fields.email}</span>
-          <input name="email" type="email" autoComplete="email" required placeholder="you@company.com" />
-        </label>
+        {field('name', contact.fields.name, 'Your name')}
+        {field('email', contact.fields.email, 'you@company.com')}
       </div>
       <label className="field">
         <span className="field__label mono">{contact.fields.company}</span>
         <input name="company" type="text" autoComplete="organization" placeholder="Company (optional)" />
       </label>
-      <label className="field">
-        <span className="field__label mono">{contact.fields.goal}</span>
-        <input name="goal" type="text" required placeholder="An AI voice agent, a workflow, a CRM integration…" />
-      </label>
-      <label className="field">
-        <span className="field__label mono">{contact.fields.challenge}</span>
-        <textarea name="challenge" rows={5} required placeholder="What is happening now, and what should happen instead?" />
-      </label>
+      {field('goal', contact.fields.goal, 'An AI voice agent, a workflow, a CRM integration')}
+      {field('challenge', contact.fields.challenge, 'What is happening now, and what should happen instead?', true)}
       <label className="field">
         <span className="field__label mono">{contact.fields.tools}</span>
-        <textarea name="tools" rows={2} placeholder="GoHighLevel, Airtable, n8n, Twilio…" />
+        <textarea name="tools" rows={2} placeholder="GoHighLevel, Airtable, n8n, Twilio" />
       </label>
       <div className="cform__actions">
         <button className="btn" type="submit">
@@ -68,7 +88,13 @@ export function ContactForm() {
           <span className="btn__label">Send enquiry</span>
           <span className="btn__arrow" aria-hidden="true">↗</span>
         </button>
-        <p className="cform__hint mono" role="status">{sent ? 'Your email app should open with the message ready to send.' : 'Opens your email app with the details filled in.'}</p>
+        <p className="cform__hint" data-tone={status === 'error' ? 'error' : 'idle'} role="status">
+          {status === 'opened'
+            ? 'Your email app should open with the message ready to send.'
+            : status === 'error'
+              ? 'Please complete the highlighted fields.'
+              : 'Opens your email app with the details filled in.'}
+        </p>
       </div>
     </form>
   );

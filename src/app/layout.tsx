@@ -3,7 +3,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Motion } from '@/components/Motion';
 import { site } from '@/data/site';
-import { display, mono } from './fonts';
+import { body, display, mono } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${display.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: flags }} />
       </head>

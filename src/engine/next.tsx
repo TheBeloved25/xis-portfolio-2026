@@ -24,7 +24,8 @@ export function Engine({ setup }: { setup?: () => void }) {
       if (mode.current !== 'idle') return;
       mode.current = 'push';
       const href = url.pathname + url.search + url.hash;
-      router.prefetch(href);
+      // No router.prefetch: this site is a static export and RSC prefetch payloads
+      // do not exist on a plain host (they 404).
       await leave();
       cleanup();
       router.push(href, { scroll: false });

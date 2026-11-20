@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { site } from '@/data/site';
@@ -22,8 +22,7 @@ export function Header() {
   useEffect(() => {
     if (!open) { startScroll(); return; }
     stopScroll();
-    const panelEl = panel.current;
-    const focusables = () => [...(panelEl?.querySelectorAll<HTMLElement>('a, button') || [])];
+    const focusables = () => [...(panel.current?.querySelectorAll<HTMLElement>('a, button') || [])];
     focusables()[0]?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { setOpen(false); button.current?.focus(); return; }
@@ -39,30 +38,21 @@ export function Header() {
     return () => { document.removeEventListener('keydown', onKey); startScroll(); };
   }, [open]);
 
-  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+  const isActive = (href: string) => pathname.startsWith(href);
 
   return (
     <>
       <header className="site-header">
         <Link href="/" className="brand" aria-label={`${site.brand}, ${site.brandFull}, home`}>
-          <span className="brand__dot" aria-hidden="true" />
+          <span className="brand__mark" aria-hidden="true" />
           {site.brand}
         </Link>
         <nav className="nav" aria-label="Primary">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="nav__link roll" aria-label={l.label} aria-current={isActive(l.href) ? 'page' : undefined}>
-              <span>{l.label}</span><span aria-hidden="true">{l.label}</span>
-            </Link>
+            <Link key={l.href} href={l.href} className="nav__link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</Link>
           ))}
         </nav>
-        <button
-          ref={button}
-          type="button"
-          className="menu-button"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
+        <button ref={button} type="button" className="menu-button" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((v) => !v)}>
           {open ? 'Close' : 'Menu'}
         </button>
       </header>
@@ -70,9 +60,7 @@ export function Header() {
         <nav aria-label="Mobile">
           <Link href="/" className="menu__link"><span className="menu__num">00</span>Home</Link>
           {links.map((l, i) => (
-            <Link key={l.href} href={l.href} className="menu__link">
-              <span className="menu__num">0{i + 1}</span>{l.label}
-            </Link>
+            <Link key={l.href} href={l.href} className="menu__link"><span className="menu__num">0{i + 1}</span>{l.label}</Link>
           ))}
         </nav>
         <p className="menu__meta mono">{site.brandFull} / {site.role}</p>

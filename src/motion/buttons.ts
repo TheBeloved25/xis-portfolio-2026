@@ -14,14 +14,14 @@ export const buttonFill = () => onPage(() => {
     };
     let closed = true;
     const open = (at: string) => {
-      if (closed) gsap.set(fill, { clipPath: `circle(0% at ${at})` });
+      if (closed) gsap.set(fill, { clipPath: 'inset(0 100% 0 0)' });
       closed = false;
       btn.classList.add('is-filled');
-      gsap.to(fill, { clipPath: `circle(150% at ${at})`, duration: 0.6, ease: ease.soft, overwrite: true });
+      gsap.to(fill, { clipPath: 'inset(0 0% 0 0)', duration: 0.55, ease: ease.soft, overwrite: true });
     };
     const close = (at: string) => {
       btn.classList.remove('is-filled');
-      gsap.to(fill, { clipPath: `circle(0% at ${at})`, duration: 0.5, ease: ease.soft, overwrite: true, onComplete: () => { closed = true; } });
+      gsap.to(fill, { clipPath: 'inset(0 100% 0 0)', duration: 0.45, ease: ease.soft, overwrite: true, onComplete: () => { closed = true; } });
     };
     const enter = (e: PointerEvent) => open(from(e));
     const leave = (e: PointerEvent) => close(from(e));

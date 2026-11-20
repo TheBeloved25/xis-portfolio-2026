@@ -1,15 +1,13 @@
 // CONTENT FILE. Every visible string lives here. The owner's master professional profile is the
 // source; this file selects short sections from it for the web rather than showing all 15 sections.
 //
-// Confirm before going live (mirrored in DESIGN.md and the final handoff):
-//   - public name: Emmanuel (or full professional name)
-//   - brand: personal "Emmanuel" is used; "Xceptional / Xceptional Intelligence System" is NOT
-//     baked in because the master doc marks final naming unconfirmed
+// Live: https://xis-emmanuel.pages.dev
+// Brand: XIS / XCEPTIONAL Intelligence System. Person: Emmanuel Akinfesola.
+// Still to confirm with the owner:
 //   - email: hello@emmanuel.studio (placeholder)
 //   - LinkedIn and Fiverr URLs are placeholders
-//   - production URL: https://xis-emmanuel.pages.dev (live; update here if you move to a custom domain)
 //   - years of experience: not supplied, deliberately omitted
-//   - unverified numeric results are deliberately NOT published (per master doc instruction)
+//   - unverified numeric results are deliberately NOT published
 //   - Event photography, Inbound SMS and Voice AI projects carry a status to be confirmed:
 //     shown as "In progress" and flagged verify: true
 //   - client permission to describe each project publicly
@@ -74,7 +72,7 @@ export const hero = {
   intro:
     'I design and develop AI agents, automation systems, and intelligent workflows that help businesses streamline operations, improve customer communication, and work smarter.',
   cta: 'Let’s work together',
-  secondary: 'Explore my work',
+  secondary: 'View my work',
   nodes: [
     { id: '01', label: 'Capture' },
     { id: '02', label: 'Interpret' },

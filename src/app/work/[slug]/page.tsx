@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { notFound } from 'next/navigation';
 import { Cover } from '@/components/Cover';
-import { Status } from '@/components/Status';
 import { projects, statusLabels } from '@/data/site';
 
 export function generateStaticParams() {
@@ -16,6 +15,14 @@ export async function generateMetadata({ params }: PageProps<'/work/[slug]'>): P
   return { title: p.title, description: `${p.title}: ${summary} Status: ${statusLabels[p.status]}.` };
 }
 
+const rows = [
+  { key: 'Context', get: (p: (typeof projects)[number]) => p.overview },
+  { key: 'Problem', get: (p: (typeof projects)[number]) => p.challenge },
+  { key: 'Solution', get: (p: (typeof projects)[number]) => p.solution },
+  { key: 'Contribution', get: (p: (typeof projects)[number]) => p.contribution },
+  { key: 'Outcome', get: (p: (typeof projects)[number]) => p.outcome },
+];
+
 export default async function CaseStudy({ params }: PageProps<'/work/[slug]'>) {
   const { slug } = await params;
   const i = projects.findIndex((x) => x.slug === slug);
@@ -25,70 +32,43 @@ export default async function CaseStudy({ params }: PageProps<'/work/[slug]'>) {
 
   return (
     <article className="case">
-      <header className="case__hero section--full">
+      <header className="case__hero">
         <div className="case__meta">
           <p className="label mono">{p.code} / {p.category}</p>
-          <Status value={p.status} />
+          <span className={`status status--${p.status}`}><span className="status__dot" aria-hidden="true" />{statusLabels[p.status]}</span>
         </div>
-        <h1 className="case__title display" data-split="lines" data-intro>{p.title}</h1>
+        <h1 className="case__title" data-split="lines" data-intro>{p.title}</h1>
         <p className="case__summary" data-reveal data-intro data-delay="0.2">{p.summary}</p>
         <div className="case__cover" data-reveal data-intro data-delay="0.3">
           <Cover cover={p.cover} priority />
         </div>
       </header>
 
-      <section className="case__section section" aria-labelledby="overview-title">
-        <div className="case__label mono">01 / Overview</div>
-        <div className="case__content">
-          <h2 id="overview-title" className="section__title" data-split="lines">What this system does.</h2>
-          <p className="prose">{p.overview}</p>
-        </div>
-      </section>
+      {rows.map((row, n) => (
+        <section className="section case__row" key={row.key} aria-label={row.key}>
+          <div className="case__key">{String(n + 1).padStart(2, '0')} / {row.key}</div>
+          <div className="case__value">
+            <h2 className="section__title" data-reveal>{row.key === 'Context' ? 'What this system does.' : row.key === 'Problem' ? 'The work it replaces.' : row.key === 'Solution' ? 'How it is put together.' : row.key === 'Contribution' ? 'My role in the build.' : 'Where it stands.'}</h2>
+            <p className="prose">{row.get(p)}</p>
+            {row.key === 'Solution' && (
+              <ul className="case__caps">{p.capabilities.map((c) => <li key={c} data-node>{c}</li>)}</ul>
+            )}
+            {row.key === 'Contribution' && (
+              <p className="mono" style={{ marginTop: '1.5rem', color: 'var(--c-muted)', lineHeight: 1.9 }}>
+                {p.stack.join(' · ')}{p.platforms?.length ? ` / ${p.platforms.join(' · ')}` : ''}
+              </p>
+            )}
+            {p.verify && row.key === 'Outcome' && (
+              <p className="mono" style={{ marginTop: '1.5rem', color: 'var(--c-accent)' }}>Status to be confirmed with the owner before publication.</p>
+            )}
+          </div>
+        </section>
+      ))}
 
-      <section className="case__section section" aria-labelledby="challenge-title">
-        <div className="case__label mono">02 / Problem</div>
-        <div className="case__content">
-          <h2 id="challenge-title" className="section__title" data-split="lines">The work it replaces.</h2>
-          <p className="prose">{p.challenge}</p>
-        </div>
-      </section>
-
-      <section className="case__section section" aria-labelledby="solution-title">
-        <div className="case__label mono">03 / Solution</div>
-        <div className="case__content">
-          <h2 id="solution-title" className="section__title" data-split="lines">How it is put together.</h2>
-          <p className="prose">{p.solution}</p>
-          <ul className="case__caps">
-            {p.capabilities.map((c) => <li key={c} data-node>{c}</li>)}
-          </ul>
-        </div>
-      </section>
-
-      <section className="case__section section" aria-labelledby="stack-title">
-        <div className="case__label mono">04 / Stack & contribution</div>
-        <div className="case__content">
-          <h2 id="stack-title" className="section__title" data-split="lines">Tools and my role.</h2>
-          <p className="mono case__stack">{p.stack.join(' · ')}</p>
-          {p.platforms && <p className="mono case__stack">Channels: {p.platforms.join(' · ')}</p>}
-          <p className="prose">{p.contribution}</p>
-        </div>
-      </section>
-
-      <section className="case__section section" aria-labelledby="outcome-title">
-        <div className="case__label mono">05 / Outcome</div>
-        <div className="case__content">
-          <h2 id="outcome-title" className="section__title" data-split="lines">Where it stands.</h2>
-          <p className="prose case__outcome">{p.outcome}</p>
-          {p.verify && (
-            <p className="case__verify mono">Status to be confirmed with the owner before publication.</p>
-          )}
-        </div>
-      </section>
-
-      <section className="case__next section section--full" aria-labelledby="next-title">
-        <p className="label mono">Next system</p>
+      <section className="case__next section section--full" aria-label="Next project">
+        <p className="label mono">Next entry</p>
         <Link href={`/work/${next.slug}`} className="case__next-link" data-cursor="Next">
-          <span id="next-title" className="case__next-title">{next.title}</span>
+          <span className="case__next-title">{next.title}</span>
           <span className="case__next-arrow" aria-hidden="true">↗</span>
         </Link>
       </section>
