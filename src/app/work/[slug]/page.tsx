@@ -54,9 +54,16 @@ export default async function CaseStudy({ params }: PageProps<'/work/[slug]'>) {
               <ul className="case__caps">{p.capabilities.map((c) => <li key={c} data-node>{c}</li>)}</ul>
             )}
             {row.key === 'Contribution' && (
-              <p className="mono" style={{ marginTop: '1.5rem', color: 'var(--c-muted)', lineHeight: 1.9 }}>
-                {p.stack.join(' · ')}{p.platforms?.length ? ` / ${p.platforms.join(' · ')}` : ''}
-              </p>
+              <>
+                <p className="mono" style={{ marginTop: '1.5rem', color: 'var(--c-muted)', lineHeight: 1.9 }}>
+                  {p.stack.join(' · ')}{p.platforms?.length ? ` / ${p.platforms.join(' · ')}` : ''}
+                </p>
+                {p.demo && (
+                  <p style={{ marginTop: '1.5rem' }}>
+                    <a className="text-link" href={p.demo} target="_blank" rel="noopener noreferrer">View the live system</a>
+                  </p>
+                )}
+              </>
             )}
             {p.verify && row.key === 'Outcome' && (
               <p className="mono" style={{ marginTop: '1.5rem', color: 'var(--c-accent)' }}>Status to be confirmed with the owner before publication.</p>

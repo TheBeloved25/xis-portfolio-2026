@@ -28,6 +28,7 @@ export type Project = {
   capabilities: string[];
   stack: string[];
   platforms?: string[];
+  demo?: string;
   contribution: string;
   outcome: string;
   cover: { src?: string; seed: number; alt: string };
@@ -205,6 +206,7 @@ export const projects: Project[] = [
     capabilities: ['Website chat agent', 'Vector-store knowledge base', 'Conversation memory', 'Booking and ticket tools', 'Email verification', 'Transcript delivery by Gmail'],
     stack: ['n8n', 'OpenAI', 'Supabase vector store', 'Postgres', 'Zoho', 'Google Drive and Docs', 'Gmail'],
     platforms: ['Website'],
+    demo: 'https://flowdit.com',
     contribution: 'Designing the tool-routing workflow and connecting chat, knowledge, booking, ticketing and email into one agent.',
     outcome: 'Delivered and live. The agent handles visitor questions, bookings and tickets on the production site.',
     cover: {
@@ -450,16 +452,16 @@ export const approach = [
 export const philosophy = [
   { title: 'Understanding before building', text: 'Every business has its own process. I understand the problem before recommending a technical solution.' },
   { title: 'Functionality over complexity', text: 'A solution should be as simple as it can be while still doing the job. Reliable beats clever.' },
-  { title: 'Outcomes over features', text: 'The point is not building workflows or configuring agents. It is what those systems accomplish for the people using them.' },
+  { title: 'Outcomes over features', text: 'A running workflow is only the start. Measure what those systems accomplish for the people using them.' },
   { title: 'Continuous improvement', text: 'Technology moves and business needs change. I keep testing and improving what I build.' },
 ];
 
 export const about = {
   intro: 'I am Emmanuel Akinfesola, an AI Automation Specialist focused on designing and developing intelligent business systems that help companies streamline operations, improve customer experiences, and eliminate unnecessary manual work.',
   background: 'My academic background is in Mechanical Engineering. It shapes how I solve problems: break a system into its parts, understand how they interact, and build from there. Over time my interests moved into artificial intelligence, software automation, conversational systems and business technology.',
-  thinking: 'I do not approach automation as simply connecting one application to another. A voice agent should not just answer a call. It should collect information, interact with the right applications, update records and trigger the next step. A lead workflow should do more than collect details. It should organise them, qualify where appropriate, notify the right people and support the follow-up.',
+  thinking: 'I approach each engagement as a process to understand before a set of tools to connect. A voice agent collects information, interacts with the right applications, updates records and triggers the next step. A lead workflow organises details, qualifies where appropriate, notifies the right people and supports the follow-up.',
   interests: 'I am particularly interested in projects where several technologies have to communicate to reach one objective, and in systems that move beyond isolated tasks to support complete business workflows.',
-  philosophyLead: 'Technology should solve problems, not create new ones.',
+  philosophyLead: 'Technology earns its place by solving a real problem.',
   direction: 'My direction is centred on AI automation, intelligent agents and connected business systems, at the meeting point of voice technology, workflow orchestration, CRM systems and API-driven integrations. I want to be a trusted technical partner for businesses adopting AI in practical, sustainable ways.',
   education: 'Mechanical Engineering',
   who: [
